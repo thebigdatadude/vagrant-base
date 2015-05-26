@@ -40,7 +40,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "node003" do |node003|
     node003.vm.box = "nrel/CentOS-6.6-x86_64"
-    node003.vm.hostname = "node002.sandbox.thebigdatadude.com"
+    node003.vm.hostname = "node003.sandbox.thebigdatadude.com"
     node003.vm.network "private_network", ip: "192.168.32.33"
   end
 

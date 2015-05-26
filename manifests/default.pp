@@ -65,7 +65,7 @@ class hwhdp {
 		require => Yumrepo [ 'yumhortonworkshdp22' ]  
 	}
 	yumrepo { 'yumhortonworksambari20':
-		name => 'hortonworksambari20',
+		name => 'ambari',
 		baseurl => 'http://public-repo-1.hortonworks.com/ambari/centos6/2.x/updates/2.0.0',
 		gpgkey => 'http://public-repo-1.hortonworks.com/ambari/centos6/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins',
 		enabled => 1,
