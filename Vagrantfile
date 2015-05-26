@@ -11,6 +11,11 @@ Vagrant.configure(2) do |config|
   #config.vm.box_url = "https://github.com/tommy-muehle/vagrant-box-centos-6.6/releases/download/1.0.0/centos-6.6-x86_64.box"
   config.vm.provision "puppet"
 
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 2
+  end
+
   # Ambari server
   config.vm.define "ambari" do |ambari|
     ambari.vm.box = "nrel/CentOS-6.6-x86_64"
