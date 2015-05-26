@@ -49,7 +49,7 @@ class hwhdp {
 
 	# Add the Hortonworks repo
 	yumrepo { 'yumhortonworkshdp22':
-		name => 'hortonworkshdp22',
+		name => 'hdp',
 		baseurl => 'http://public-repo-1.hortonworks.com/HDP/centos6/2.x/GA/2.2.0.0',
 		gpgkey => 'http://public-repo-1.hortonworks.com/HDP/centos6/2.x/GA/2.2.0.0/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins',
 		enabled => 1,
@@ -57,7 +57,7 @@ class hwhdp {
 		require => Yumrepo [ 'yumepel' ]  
 	}
 	yumrepo { 'yumhortonworksutils17':
-		name => 'hortonworksutils17',
+		name => 'hdputils',
 		baseurl => 'http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/centos6',
 		gpgkey => 'http://public-repo-1.hortonworks.com/HDP/centos6/2.x/GA/2.2.0.0/RPM-GPG-KEY/RPM-GPG-KEY-Jenkins',
 		enabled => 1,
