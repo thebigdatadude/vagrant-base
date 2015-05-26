@@ -79,6 +79,31 @@ class hwhdp {
 		content => "127.0.0.1   ${::fqdn} ${::hostname} localhost localhost.localdomain localhost4 localhost4.localdomain4\n::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.32.10	ambari.sandbox.thebigdatadude.com ambari\n192.168.32.20	master.sandbox.thebigdatadude.com master\n192.168.32.31	node001.sandbox.thebigdatadude.com node001\n192.168.32.32	node002.sandbox.thebigdatadude.com node002\n192.168.32.33	node003.sandbox.thebigdatadude.com node003"
 	}
 
+	# Inject root SSH keys
+	file { 'root-ssh-dir':
+		path => '/root/.ssh',
+		ensure => 'directory',
+		owner => 'root',
+		group => 'root',
+		mode => '700'
+	}
+	file { 'root-ssh-private-key':
+		path => '/root/.ssh/id_rsa',
+		owner => 'root',
+		group => 'root',
+		mode => '600',
+		source => '/vagrant/files/ssh_keys/root.key',
+		require => File[ 'root-ssh-dir' ]
+	}
+	file { 'root-ssh-public-key':
+		path => '/root/.ssh/authorized_keys',
+		owner => 'root',
+		group => 'root',
+		mode => '600',
+		source => '/vagrant/files/ssh_keys/root.key.pub',
+		require => File[ 'root-ssh-dir' ]
+	}
+
 	# Install some base tools
 	$cmdtools = [ "screen", "vim-enhanced", "htop" ]
 	package { $cmdtools:
@@ -120,5 +145,9 @@ node "ambari" {
 
 # Single master node only to be used in dev scenarios
 node "master" {
+	class { 'hwhdp' : }
+}
+
+node "node001", "node002", "node003" {
 	class { 'hwhdp' : }
 }
