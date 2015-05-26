@@ -104,6 +104,17 @@ class hwhdp {
 		require => File[ 'root-ssh-dir' ]
 	}
 
+	# NTP service
+	package { 'ntp':
+		name   => "ntp",
+		ensure => present
+	}
+ 	service { 'ntp-services':
+		name   => "ntpd",
+		ensure => running,
+		require => Package[ntp] 
+	}
+
 	# Install some base tools
 	$cmdtools = [ "screen", "vim-enhanced", "htop" ]
 	package { $cmdtools:
