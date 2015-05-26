@@ -143,11 +143,7 @@ node "ambari" {
 	}
 }
 
-# Single master node only to be used in dev scenarios
-node "master" {
-	class { 'hwhdp' : }
-}
-
-node "node001", "node002", "node003" {
+# Node definitions
+node "node001", "node002", "node003", "node004" {
 	class { 'hwhdp' : }
 }
