@@ -24,13 +24,8 @@ Vagrant.configure(2) do |config|
     ambari.vm.network "private_network", ip: "192.168.32.10"
   end
 
-  # Master node
-  config.vm.define "master" do |master|
-    master.vm.box = "nrel/CentOS-6.6-x86_64"
-    master.vm.hostname = "master.sandbox.thebigdatadude.com"
-    master.vm.network "private_network", ip: "192.168.32.20"
-  end
 
+  # Nodes
   config.vm.define "node001" do |node001|
     node001.vm.box = "nrel/CentOS-6.6-x86_64"
     node001.vm.hostname = "node001.sandbox.thebigdatadude.com"
@@ -47,6 +42,12 @@ Vagrant.configure(2) do |config|
     node003.vm.box = "nrel/CentOS-6.6-x86_64"
     node003.vm.hostname = "node003.sandbox.thebigdatadude.com"
     node003.vm.network "private_network", ip: "192.168.32.33"
+  end
+
+  config.vm.define "node004" do |node004|
+    node004.vm.box = "nrel/CentOS-6.6-x86_64"
+    node004.vm.hostname = "node004.sandbox.thebigdatadude.com"
+    node004.vm.network "private_network", ip: "192.168.32.34"
   end
 
   # Create a forwarded port mapping which allows access to a specific port
