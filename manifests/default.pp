@@ -76,8 +76,9 @@ class hwhdp {
 	# Inject a custom hosts file which contains names for our cluster
 	file { 'etc-hosts':
 		path => '/etc/hosts',
-		content => "127.0.0.1   ${::fqdn} ${::hostname} localhost localhost.localdomain localhost4 localhost4.localdomain4\n::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n\n192.168.32.10	ambari.sandbox.thebigdatadude.com ambari\n192.168.32.31	node001.sandbox.thebigdatadude.com node001\n192.168.32.32	node002.sandbox.thebigdatadude.com node002\n192.168.32.33	node003.sandbox.thebigdatadude.com node003\n192.168.32.34	node004.sandbox.thebigdatadude.com node004"
+		content => "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n\n192.168.32.10	ambari.sandbox.thebigdatadude.com ambari\n192.168.32.31	node001.sandbox.thebigdatadude.com node001\n192.168.32.32	node002.sandbox.thebigdatadude.com node002\n192.168.32.33	node003.sandbox.thebigdatadude.com node003\n192.168.32.34	node004.sandbox.thebigdatadude.com node004"
 	}
+	# removed from 127.0.0.1 ${::fqdn} ${::hostname} ... seems that the namenode does not bind correctly
 
 	# Inject root SSH keys
 	file { 'root-ssh-dir':
