@@ -26,6 +26,24 @@ Vagrant.configure(2) do |config|
     master.vm.network "private_network", ip: "192.168.32.20"
   end
 
+  config.vm.define "node001" do |node001|
+    node001.vm.box = "nrel/CentOS-6.6-x86_64"
+    node001.vm.hostname = "node001.sandbox.thebigdatadude.com"
+    node001.vm.network "private_network", ip: "192.168.32.31"
+  end
+
+  config.vm.define "node002" do |node002|
+    node002.vm.box = "nrel/CentOS-6.6-x86_64"
+    node002.vm.hostname = "node002.sandbox.thebigdatadude.com"
+    node002.vm.network "private_network", ip: "192.168.32.32"
+  end
+
+  config.vm.define "node003" do |node003|
+    node003.vm.box = "nrel/CentOS-6.6-x86_64"
+    node003.vm.hostname = "node002.sandbox.thebigdatadude.com"
+    node003.vm.network "private_network", ip: "192.168.32.33"
+  end
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.

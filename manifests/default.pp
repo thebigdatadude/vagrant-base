@@ -28,6 +28,15 @@ class hwhdp {
 			"set SELINUX permissive"
 		]
 	}
+	exec { 'selinuxpermissive-tmp':
+		command => '/usr/sbin/setenforce Permissive',
+		returns => [ 0, 1]
+	}
+
+	# Disable iptables firewalls
+	exec { 'disable-iptables':
+		command => '/sbin/service iptables save && /sbin/service iptables stop && /sbin/chkconfig iptables off'	
+	}
 
 	# Install EPEL repository
 	yumrepo { 'yumepel':
@@ -62,6 +71,12 @@ class hwhdp {
 		enabled => 1,
 		gpgcheck => 1,
 		require => Yumrepo [ 'yumhortonworksutils17' ]
+	}
+
+	# Inject a custom hosts file which contains names for our cluster
+	file { 'etc-hosts':
+		path => '/etc/hosts',
+		content => "127.0.0.1   ${::fqdn} ${::hostname} localhost localhost.localdomain localhost4 localhost4.localdomain4\n::1         localhost localhost.localdomain localhost6 localhost6.localdomain6\n192.168.32.10	ambari.sandbox.thebigdatadude.com ambari\n192.168.32.20	master.sandbox.thebigdatadude.com master\n192.168.32.31	node001.sandbox.thebigdatadude.com node001\n192.168.32.32	node002.sandbox.thebigdatadude.com node002\n192.168.32.33	node003.sandbox.thebigdatadude.com node003"
 	}
 
 	# Install some base tools
