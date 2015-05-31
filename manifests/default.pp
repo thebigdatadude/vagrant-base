@@ -1,13 +1,21 @@
 # This is the Hadoop default puppet manifest
 
+$use_proxy=true
+$proxy_host = "proxy.uni-linz.ac.at"
+$proxy_port = "3128"
+# $proxy_host = "secureproxy.a1.net"
+# $proxy_port = "8080"
+
 class yumproxyserver {
+
 	
-	# Inject Proxy configuration into yum nodes
 	# Use the following exec statement to add a proxy configuation for your organisation
 	# Use of a Proxy server is highly recommended especially when rolling out a high number of nodes
-	#exec { 'proxy-server':
-	#	command => '/bin/echo proxy=http://proxy.uni-linz.ac.at:3128 >> /etc/yum.conf'
-	#}
+	if $use_proxy {
+		exec { 'proxy-server':
+			command => '/bin/echo proxy=http://proxy.uni-linz.ac.at:3128 >> /etc/yum.conf'
+		}
+	}
 }
 
 # Base configuration for all HDP2.2 nodes
@@ -136,8 +144,18 @@ class hwhdp {
 
 # Ambari Server needs to have Ambari installed
 node "ambari" {
+
 	class { 'yumproxyserver' : }
 	class { 'hwhdp' : }
+
+	if $use_proxy {
+		file { 'ambari-proxy': 
+			path => '/var/lib/ambari-server/ambari-env.sh',
+			content => "AMBARI_PASSHPHRASE=\"DEV\"\nexport AMBARI_JVM_ARGS=\$AMBARI_JVM_ARGS' -Xms512m -Xmx2048m -Djava.security.auth.login.config=/etc/ambari-server/conf/krb5JAASLogin.conf -Djava.security.krb5.conf=/etc/krb5.conf -Djavax.security.auth.useSubjectCredsOnly=false -Dhttp.proxyHost=proxy.uni-linz.ac.at -Dhttp.proxyPort=3128'\nexport PATH=\$PATH:/var/lib/ambari-agent",
+			before => Exec [ 'ambari-server-setup' ],
+			require => Package [ 'ambari-server' ]
+		}
+	}
 
 	# Install the ambari package
 	package { "ambari-server":
