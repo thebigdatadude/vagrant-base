@@ -1,5 +1,15 @@
 # This is the Hadoop default puppet manifest
 
+class yumproxyserver {
+	
+	# Inject Proxy configuration into yum nodes
+	# Use the following exec statement to add a proxy configuation for your organisation
+	# Use of a Proxy server is highly recommended especially when rolling out a high number of nodes
+	#exec { 'proxy-server':
+	#	command => '/bin/echo proxy=http://proxy.uni-linz.ac.at:3128 >> /etc/yum.conf'
+	#}
+}
+
 # Base configuration for all HDP2.2 nodes
 class hwhdp {
 
@@ -19,14 +29,6 @@ class hwhdp {
 		owner => 'root',
 		group => 'root',
 		content => "LANG=\"en_US.UTF-8\"\nSYSFONT=\"latarcyrheb-sun16\""
-	}
-
-	# Inject JKU Proxy
-	augeas { 'jku-proxy':
-		context => '/etc/yum.conf',
-		changes => [
-			"set proxy http://proxy.uni-linz.ac.at:3128"
-		]
 	}
 
 	# Disable SELinux -> permissive
@@ -134,6 +136,7 @@ class hwhdp {
 
 # Ambari Server needs to have Ambari installed
 node "ambari" {
+	class { 'yumproxyserver' : }
 	class { 'hwhdp' : }
 
 	# Install the ambari package
@@ -171,6 +174,7 @@ node "ambari" {
 
 # Node definitions
 node /^node\d+$/ {
+	class { 'yumproxyserver' : }
 	class { 'hwhdp' : }
 
 	# Disable Transparent Huge Pages on the worker nodes
