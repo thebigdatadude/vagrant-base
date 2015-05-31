@@ -21,6 +21,14 @@ class hwhdp {
 		content => "LANG=\"en_US.UTF-8\"\nSYSFONT=\"latarcyrheb-sun16\""
 	}
 
+	# Inject JKU Proxy
+	augeas { 'jku-proxy':
+		context => '/etc/yum.conf',
+		changes => [
+			"set proxy http://proxy.uni-linz.ac.at:3128"
+		]
+	}
+
 	# Disable SELinux -> permissive
 	augeas { 'selinuxpermissive':
 		context => '/etc/selinux/config',
@@ -153,9 +161,20 @@ node "ambari" {
 		command => "/etc/init.d/ambari-server start",
 		require => Service[ 'ambari-server-service' ]
 	}
+
+	exec { "ambari-server-service-register":
+		command => "/sbin/chkconfig --add ambari-server",
+		returns => [ 0, 1],
+		require => Exec [ 'ambari-server-setup' ]
+	}
 }
 
 # Node definitions
-node "node001", "node002", "node003", "node004" {
+node /^node\d+$/ {
 	class { 'hwhdp' : }
+
+	# Disable Transparent Huge Pages on the worker nodes
+	exec { 'disalble-transparent-huge-pages':
+		command => "/bin/echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled"
+	}
 }
